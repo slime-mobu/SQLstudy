@@ -1,0 +1,107 @@
+CREATE TABLE `grade`(
+	`gradeid` INT(10) NOT NULL AUTO_INCREMENT COMMENT '年级id',
+	`gradename` VARCHAR(50) NOT NULL COMMENT '年级名称',
+	PRIMARY KEY(`gradeid`)
+)ENGINE=INNODB DEFAULT CHARSET=utf8
+
+-- 使用英文(),表的名称和字段尽量使用``括起来
+-- AUTO_INCREMENT 自增
+-- 字符串使用单引号括起来
+-- 所有语句后面加,最后一句不用加
+CREATE TABLE IF NOT EXISTS `student`(
+	`id` INT(4) NOT NULL AUTO_INCREMENT COMMENT '学号',
+	`name` VARCHAR (30) NOT NULL DEFAULT '匿名' COMMENT '姓名',
+	`pwd` VARCHAR (20) NOT NULL DEFAULT '123456' COMMENT '密码',
+	`sex` VARCHAR(2) NOT NULL DEFAULT '女' COMMENT '性别',
+	`birthday` DATETIME DEFAULT NULL COMMENT '出生日期',
+	`gradeid` INT(10) NOT NULL COMMENT '学生的年级',
+	`address` VARCHAR(100) DEFAULT NULL COMMENT '家庭住址',
+	`email` VARCHAR(50) DEFAULT NULL COMMENT '邮箱',
+	PRIMARY KEY(`id`),
+	KEY `FK_gradeid`(`gradeid`),
+	CONSTRAINT `FK_gradeid` FOREIGN KEY (`gradeid`) REFERENCES `grade`(`gradeid`)
+)ENGINE=INNODB DEFAULT CHARSET=utf8
+
+
+CREATE TABLE `grade`(
+	`gradeid` INT(10) NOT NULL AUTO_INCREMENT COMMENT '年级id',
+	`gradename` VARCHAR(50) NOT NULL COMMENT '年级名称',
+	PRIMARY KEY(`gradeid`)
+)ENGINE=INNODB DEFAULT CHARSET=utf8
+
+-- 使用英文(),表的名称和字段尽量使用``括起来
+-- AUTO_INCREMENT 自增
+-- 字符串使用单引号括起来
+-- 所有语句后面加,最后一句不用加
+CREATE TABLE IF NOT EXISTS `student`(
+	`id` INT(4) NOT NULL AUTO_INCREMENT COMMENT '学号',
+	`name` VARCHAR (30) NOT NULL DEFAULT '匿名' COMMENT '姓名',
+	`pwd` VARCHAR (20) NOT NULL DEFAULT '123456' COMMENT '密码',
+	`sex` VARCHAR(2) NOT NULL DEFAULT '女' COMMENT '性别',
+	`birthday` DATETIME DEFAULT NULL COMMENT '出生日期',
+	`gradeid` INT(10) NOT NULL COMMENT '学生的年级',
+	`address` VARCHAR(100) DEFAULT NULL COMMENT '家庭住址',
+	`email` VARCHAR(50) DEFAULT NULL COMMENT '邮箱',
+	PRIMARY KEY(`id`)
+)ENGINE=INNODB DEFAULT CHARSET=utf8
+
+-- 创建表的时候没有外键关系
+ALTER TABLE `student`
+ADD CONSTRAINT `FK_gradeid` FOREIGN KEY(`gradeid`) REFERENCES `grade`(`gradeid`);
+
+-- 插入语句(添加)
+-- insert into 表名([字段1,字段2,字段3])values('值1','值2','值3',...)
+INSERT INTO `grade` (`gradename`) VALUES ('大四')
+
+-- 由于主键自增我们可以省略(如果不写表的字段，他就会一一匹配)
+INSERT INTO `grade` VALUES('大三')
+
+-- 一般写插入语句，我们一定要数据和字段一一对应
+
+-- 插入多个字段
+INSERT INTO `grade` (`gradename`)
+VALUES ('大一'),('大二')
+
+INSERT INTO `student`(`name`)VALUES('张三')
+
+INSERT INTO `student`(`name`,`pwd`,`sex`)VALUES('张三','aaaaaa','男')
+
+INSERT INTO `student`(`name`,`pwd`,`sex`)
+VALUES('李四','aaaaaa','男'),('王五','aaaaaa','男')
+
+
+-- 修改学员名字
+UPDATE `student` SET `name` = 'slime' WHERE id = 1;
+-- 不指定条件的情况下，会改动所有的表
+UPDATE `student` SET `name` = '长江七号'
+
+-- 语法：
+-- UPDATE 表名 SET colnum_name=value,[colnum_name=value] WHERE 条件; 
+
+
+-- 通过多个条件定位数据，无上限   &&  ||
+UPDATE `student` SET `name` = '长江七号' WHERE `name` = 'slime' OR sex = '女' 
+
+
+UPDATE `student` SET `birthday` = CURRENT_TIME WHERE `name` = 'slime' OR sex = '女' 
+
+
+-- 删除数据(避免这样写)
+DELETE FROM `student`
+-- 删除指定数据
+-- 删除数据(避免这样写)
+DELETE FROM `student` WHERE id = 1
+
+
+-- 测试delete和TRUNCATE区别
+CREATE TABLE `test`(
+    `id` INT(4) NOT NULL AUTO_INCREMENT,
+    `coll` VARCHAR(20) NOT NULL,
+    PRIMARY KEY (`id`)
+)ENGINE=INNODB DEFAULT CHARSET=utf8
+
+INSERT INTO `test` (`coll`) VALUES ('1'),('2'),('3')
+
+DELETE FROM `test`-- 不会影响自增
+
+TRUNCATE TABLE `test`
