@@ -1,0 +1,77 @@
+-- =================== 常用函数 ====================
+-- 数学运算
+SELECT ABS(-8) -- 绝对值
+SELECT CEILING(9.4) -- 向上取整
+SELECT FLOOR(9.4) -- 向下取整
+SELECT RAND() -- 返回一个0~1之间的随机数
+SELECT SIGN(10) -- 判断一个数的符合  负数-1 正数1
+
+-- 字符串函数
+SELECT CHAR_LENGTH('shdkakdjald') -- 字符串长度
+SELECT CONCAT('sl','im','e') -- 拼接字符串
+SELECT INSERT('slimety',1,3,'sil') -- 从某个位置开始替换某个长度
+SELECT LOWER('slime') -- 小写字母
+SELECT UPPER('SLIME') -- 大写字母
+SELECT INSTR('slime','i')-- 返回第一次出现的子串的索引
+SELECT REPLACE('slime like acm','acm','game')-- 替换出现的指定字符串
+SELECT SUBSTR('slimehcmxdca',4,5)-- 返回指定的子字符串(源字符串，截取的位置，截取的长度)
+SELECT REVERSE('slimety')-- 反转字符串
+
+-- 查询姓周的学生  姓改为邹
+SELECT REPLACE (`studentname`,'周','邹') FROM `student`
+WHERE `studentname` LIKE '周%'
+
+-- 时间和日期函数
+
+SELECT CURRENT DATE() -- 获取当前日期
+SELECT CURDATE()-- 获取当前日期
+SELECT NOW()-- 获取当前的时间
+SELECT LOCALTIME()-- 本地时间
+SELECT SYSDATE ()-- 系统时间
+
+SELECT YEAR(NOW ())
+SELECT MONTH(NOW())
+SELECT DAY(NOW())
+SELECT HOUR(NOW ())
+SELECT MINUTE(NOW())
+SELECT SECOND(NOW())
+
+-- 系统
+SELECT SYSTEM_USER()
+SELECT USER()
+SELECT VERSION()
+
+-- ============ 聚合函数 ===============
+-- 都能统计 表中的数据
+SELECT COUNT(`studentname`) FROM `student`-- count(指定列)，会忽略null值
+SELECT COUNT(*) FROM `student`-- count(*)，不会忽略null值
+SELECT COUNT(1) FROM `student`-- count(1)，不会忽略null值
+
+SELECT SUM(`studentresult`) AS 总和 FROM `result`
+SELECT AVG(`studentresult`) AS 平均分 FROM `result`
+SELECT MAX(`studentresult`) AS 最高分 FROM `result`
+SELECT MIN(`studentresult`) AS 最低分 FROM `result`
+
+-- ========== 测试 MD5加密===========
+CREATE TABLE `testmd5`(
+     `id` INT(4) NOT NULL,
+     `name` VARCHAR(20) NOT NULL,
+     `pwd` VARCHAR(50) NOT NULL,
+     PRIMARY KEY(`id`)
+)ENGINE=INNODB DEFAULT CHARSET=utf8
+
+-- 明文密码
+INSERT INTO `testmd5` VALUES(1,'zhangsan','123456'),(2,'lisi','123456'),(3,'wangwu','123456')
+
+-- 加密
+UPDATE `testmd5` SET pwd=MD5(pwd) WHERE id=1
+ 
+SELECT * FROM testmd5
+ 
+UPDATE `testmd5` SET pwd=MD5(pwd) -- 加密全部的密码
+
+-- 插入的时候加密
+INSERT INTO `testmd5` VALUES(4,'xiaoming',MD5('123456'))
+ 
+-- 如何校验：将用户传递进来的密码，进行md5加密，然后比对加密后的值 
+SELECT * FROM `testmd5` WHERE `name`='xiaoming' AND pwd=MD5('123456')
