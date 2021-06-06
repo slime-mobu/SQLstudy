@@ -1,0 +1,42 @@
+-- 创建用户 CREATE USER 用户名 IDENTIFIED BY '密码'
+CREATE USER slime IDENTIFIED BY '123456'
+
+-- 修改密码(修改当前用户密码)
+SET PASSWORD = PASSWORD('123456')
+-- 修改密码(修改指定用户密码)
+SET PASSWORD FOR slime = PASSWORD('111111')
+
+-- 重命名 RENAME USER 原来名字 TO 新的名字
+RENAME USER slime TO slime2
+
+-- 用户授权 ALL PRIVILEGES全部的权限,库.表
+-- ALL PRIVILEGES 除了给别人授权
+GRANT ALL PRIVILEGES ON *.* TO slime2
+
+-- 查询权限
+SHOW GRANTS FOR slime2 -- 查看指定用户的权限
+SHOW GRANTS FOR root@localhost
+
+-- root用户权限 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION
+
+-- 撤销权限 REVOKE 哪些权限，在哪个库撤销，给谁撤销
+REVOKE ALL PRIVILEGES ON *.* FROM slime2
+
+-- 删除用户
+DROP USER slime
+
+# mysqldump -h主机 -u用户名 -p密码 数据库 表名 >物理磁盘位置/文件名
+mysqldump -hlocalhost -uroot -p123456 school student >D:/a.sql
+
+# mysqldump -h主机 -u用户名 -p密码 数据库 表1 表2 表3 >物理磁盘位置/文件名
+mysqldump -hlocalhost -uroot -p123456 school student result >D:/a.sql
+
+# mysqldump -h主机 -u用户名 -p密码 数据库 >物理磁盘位置/文件名
+mysqldump -hlocalhost -uroot -p123456 school >D:/a.sql
+
+# 导入
+# 登录的情况下,切换到指定的数据库
+# source备份文件
+source d:/a.sql
+mysq1 -u用户名 -p密码 库名 <备份文件
+
